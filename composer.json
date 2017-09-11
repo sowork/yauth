@@ -1,0 +1,16 @@
+{
+    "name": "sowork/yii-laravel-rbac",
+    "description": "Based on yii developed laravel rbac",
+    "authors": [
+        {
+            "name": "sowork",
+            "email": "807522127@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Sowork\\YAuth\\": "src/"
+        }
+    }
+}

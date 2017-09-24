@@ -22,4 +22,8 @@ trait YAuthUserTrait
         return $this->belongsToMany('Sowork\YAuth\YAuthItem', 'yauth_assignments', 'user_id', 'item_name');
     }
 
+    public function getGuard(){
+        return $this->getTable();
+    }
+
 }

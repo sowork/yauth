@@ -25,6 +25,6 @@ class YAuthAssignment extends Model
     public $dates = ['deleted_at'];
 
     public function items(){
-        return $this->belongsToMany('App\Role', 'yauth_assignments', 'item_name');
+        return $this->belongsToMany('Sowork\YAuth\YAuthItem', 'yauth_assignments', 'item_name', 'item_name');
     }
 }

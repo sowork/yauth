@@ -32,22 +32,6 @@ class YAuthItem extends Model
         'deleting' => 'Sowork\YAuth\Http\Events\YAuthItemDeleting',
     ];
 
-
-    /**
-     * 根据type返回相应的items列表
-     * @param $type
-     */
-    public static function getItems($type){
-        return self::where('item_type', $type)->get();
-    }
-
-    /**
-     * 根据name返回对应的权限或角色
-     */
-    public static function getItem($name){
-        return self::find($name);
-    }
-
     /**
      * 返回
      */

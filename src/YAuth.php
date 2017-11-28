@@ -9,6 +9,8 @@
 namespace Sowork\YAuth;
 
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Sowork\YAuth\Http\Interfaces\YAuthAssignmentInterface;
 use Sowork\YAuth\Http\Interfaces\YAuthInterface;
 use Sowork\YAuth\Http\Interfaces\YAuthItemsChildInterface;
@@ -35,4 +37,36 @@ class YAuth implements YAuthItemsInterface, YAuthItemsChildInterface, YAuthInter
      * @var
      */
     protected $itemsChilds;
+
+    /**
+     * 默认运行迁移
+     * @var bool
+     */
+    public static $runsMigrations = true;
+
+    /**
+     * 配置yauth不使用默认迁移
+     */
+    public static function ignoreMigrations(){
+        static::$runsMigrations = false;
+
+//        dd(new static());
+//        return true;
+    }
+
+    /**
+     * 注册路由
+     */
+    public static function routes(){
+        $defaultOptions = [
+            'prefix' => 'yauth',
+            'namespace' => 'Sowork\YAuth\Http\Controllers',
+            'middleware' => ['web', 'auth']
+        ];
+
+        Route::group($defaultOptions, function (){
+            Route::get('items/search', 'ItemController@search')->name('items.search');
+            Route::resource('items', 'ItemController');
+        });
+    }
 }

@@ -36,6 +36,11 @@ interface YAuthItemsInterface
     public function add(YAuthItem $yAuthItem);
 
     /**
+     * 获取所有Item
+     */
+    public function getItems($item_type = null, $item_name = null, $is_trashed=true);
+
+    /**
      * 获取所有角色列表
      */
     public function getRoles();

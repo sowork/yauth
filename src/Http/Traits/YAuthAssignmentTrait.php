@@ -39,14 +39,14 @@ trait YAuthAssignmentTrait
     }
 
     public function getAssignments($type = NULL, $item_name = FALSE){
-        return Auth::user()
-            ->with(['assignments' => function($query) use ($type, $item_name){
-                $query->when($type, function ($query) use ($type){
-                    return $query->where('item_type', $type);
-                })->when($type, function ($query) use ($item_name){
-                    return $query->where('item_name', $item_name);
-                })->where('guard', Auth::user()->getGuard());
-            }])
+        return YAuthAssignment::with('items')
+            ->withTrashed()
+            ->where('user_id', Auth::id())
+            ->when($type, function ($query) use ($type){
+                return $query->where('item_type', $type);
+            })->when($item_name, function ($query) use ($item_name){
+                return $query->where('item_name', $item_name);
+            })->where('guard_table', Auth::user()->getGuard())
             ->get();
     }
 

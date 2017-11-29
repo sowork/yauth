@@ -1,6 +1,9 @@
 {
     "name": "sowork/yauth",
+    "type": "laravel-package",
     "description": "laravel rbac package",
+    "keywords": ["laravel", "rbac", "yauth"],
+    "license": "MIT",
     "authors": [
         {
             "name": "sowork",

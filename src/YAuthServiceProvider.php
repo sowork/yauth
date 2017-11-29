@@ -55,7 +55,7 @@ class YAuthServiceProvider extends ServiceProvider
      * 注册视图
      */
     private function registerView(){
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'yauth');
+//        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'yauth');
 //        $this->publishes([
 //            __DIR__.'/../resources/views' => base_path('resources/views/vendor/yauth'),
 //        ], 'yauth-views');
@@ -65,9 +65,9 @@ class YAuthServiceProvider extends ServiceProvider
      * 注册资源
      */
     private function registerResource(){
-        $this->publishes([
-            __DIR__.'/../resources/yauth-assets' => public_path('vendor/yauth-assets'),
-        ], 'yauth-public');
+//        $this->publishes([
+//            __DIR__.'/../resources/yauth-assets' => public_path('vendor/yauth-assets'),
+//        ], 'yauth-public');
     }
 
     public function provides()

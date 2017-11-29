@@ -37,17 +37,17 @@ interface YAuthAssignmentInterface
      * @param $item_name
      * @return mixed
      */
-    public function getAssignments($type = FALSE, $item_name = FALSE);
+    public function getAssignments($user_id, $type = NULL, $is_show_del = FALSE, $item_name = FALSE);
 
     /**
      * 只获取用户分配角色
      */
-    public function getUserRoles();
+    public function getUserRoles($user_id, $is_show_del = FALSE);
 
     /**
      * 只获取用户分配权限
      */
-    public function getUserPermissions();
+    public function getUserPermissions($user_id, $is_show_del = FALSE);
 
     /**
      * 获取用户某一个角色
@@ -55,7 +55,7 @@ interface YAuthAssignmentInterface
      * @param $role_name
      * @return mixed
      */
-    public function getUserRole($role_name);
+    public function getUserRole($user_id, $item_name = FALSE, $is_show_del = FALSE);
 
     /**
      * 获取用户某一个权限
@@ -63,5 +63,5 @@ interface YAuthAssignmentInterface
      * @param $permission_name
      * @return mixed
      */
-    public function getUserPermission($permission_name);
+    public function getUserPermission($user_id, $item_name = FALSE, $is_show_del = FALSE);
 }

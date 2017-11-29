@@ -35,9 +35,9 @@ class StoreItemPost extends FormRequest
     {
         return [
             //
-            'item_name' => 'required|max:191|unique:yauth_items',
-            'item_type' => 'required|integer',
-            'item_desc' => 'max:191'
+            '*.item_name' => 'required|max:191|unique:yauth_items,item_name',
+            '*.item_type' => 'required|integer|in:1,2',
+            '*.item_desc' => 'max:191'
         ];
     }
 

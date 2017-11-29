@@ -58,15 +58,15 @@ class YAuth implements YAuthItemsInterface, YAuthItemsChildInterface, YAuthInter
      * 注册路由
      */
     public static function routes(){
-        $defaultOptions = [
-            'prefix' => 'yauth',
-            'namespace' => 'Sowork\YAuth\Http\Controllers',
-            'middleware' => ['web', 'auth']
-        ];
-
-        Route::group($defaultOptions, function (){
-            Route::get('items/search', 'ItemController@search')->name('items.search');
-            Route::resource('items', 'ItemController');
-        });
+//        $defaultOptions = [
+//            'prefix' => 'yauth',
+//            'namespace' => 'Sowork\YAuth\Http\Controllers',
+//            'middleware' => ['web', 'auth']
+//        ];
+//
+//        Route::group($defaultOptions, function (){
+//            Route::get('items/search', 'ItemController@search')->name('items.search');
+//            Route::resource('items', 'ItemController');
+//        });
     }
 }

@@ -14,6 +14,12 @@ use Sowork\YAuth\YAuthItem;
 interface YAuthItemsInterface
 {
 
+    /**
+     * 创建item
+     * @param $items
+     * @return mixed
+     */
+    public function createItems($items);
 
     /**
      * 创建权限

@@ -34,16 +34,11 @@ trait YAuthTrait
     public function checkAccess($userId, $permissionName){
         $userAssignments = $this->getAssignments($userId);
         if(! $userAssignments->count()){
-            return null;
-        }
-
-        $assignments = $userAssignments[0]->assignments;
-        if(! $assignments->count()){
             return false;
         }
 
         $this->loadFromCache();
-        return $this->checkAccessFromCache($permissionName, $assignments);
+        return $this->checkAccessFromCache($permissionName, $userAssignments);
     }
 
     public function can($permissionName){
@@ -69,6 +64,7 @@ trait YAuthTrait
         foreach (YAuthItemChild::all() as $itemChild){
             $data[1][$itemChild->item_name] = $itemChild;
         }
+        list($this->items, $this->itemsChilds) = $data;
         Cache::forever(config('yauth.cacheKey'), $data);
     }
 

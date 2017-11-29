@@ -47,15 +47,9 @@ class ItemController extends Controller
     public function store(StoreItemPost $request)
     {
         //
-        if($request->input('item_type') == 2){
-            $item = YAuth::createPermission($request->input('item_name'));
-        }else{
-            $item = YAuth::createRole($request->input('item_name'));
-        }
-        $item->item_desc = $request->get('item_desc') ?? '';
         try{
             $isError = false;
-            $isError = YAuth::add($item);
+            $isError = YAuth::createItems($request->all());
         }catch (\Exception $e){
         }finally{
             return response()->json([

@@ -1,0 +1,16 @@
+{
+    "name": "sowork/yauth",
+    "description": "laravel rbac package",
+    "authors": [
+        {
+            "name": "sowork",
+            "email": "807522127@qq.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Sowork\\YAuth\\": "src/"
+        }
+    }
+}

@@ -11,6 +11,13 @@
         }
     ],
     "require": {},
+<<<<<<< HEAD
+=======
+    "require-dev": {
+        "mockery/mockery": "~1.0",
+        "phpunit/phpunit": "~6.0"
+    },
+>>>>>>> add unit test
     "autoload": {
         "psr-4": {
             "Sowork\\YAuth\\": "src/"

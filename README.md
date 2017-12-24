@@ -3,6 +3,10 @@
 >- 重要：当前版本不稳定，请不要用在项目中
 
 ## 安装
+<<<<<<< HEAD
+=======
+- 注册:在`config/app.php`文件中`providers`数组中注册提供者 `Sowork\YAuth\YAuthServiceProvider::class,`，在`config/app.php`文件`aliases`数组中注册`'YAuth' => Sowork\YAuth\YAuthServiceProvider::class,`
+>>>>>>> add unit test
     
 
 ## 资源发布
@@ -28,6 +32,7 @@ $role=YAuth::createRole('3xhjG5l0WJifkAtt');
 $role->item_desc = 'role desc';
 YAuth::add($role);
 ```
+<<<<<<< HEAD
 - 给角色分配权限
 ```
 YAuth::addChild($role, $permission);
@@ -36,6 +41,8 @@ YAuth::addChild($role, $permission);
 ```
 YAuth::addChild($permission, $permission);
 ```
+=======
+>>>>>>> add unit test
 - 修改权限/角色信息
 ```
 $item=YAuthItem::find('wo1f7lqD5iiejB3m');
@@ -52,6 +59,13 @@ YAuth::remove($permission, false) //第二个参数默认FALSE时表示进行软
 $item=YAuthItem::find('IySGxXZhM8Yj99qg');
 YAuth::assign($item, 1);
 ```
+<<<<<<< HEAD
+=======
+- 给权限分配给权限
+```
+YAuth::addChild($permission, $permission);
+```
+>>>>>>> add unit test
 - 移除角色权限
 ```
 $item = YAuthItem::find('3xhjG5l0WJifkAtt');

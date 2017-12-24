@@ -28,11 +28,7 @@ trait YAuthTrait
     public function update(Model $item){
         if(!$item->exists)
             return;
-<<<<<<< HEAD
-        $item->save();
-=======
         return $item->save();
->>>>>>> add unit test
     }
 
     public function checkAccess($userId, $permissionName){

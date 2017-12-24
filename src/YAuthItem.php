@@ -28,7 +28,15 @@ class YAuthItem extends Model
 
     public $dates = ['deleted_at'];
 
+    /**
+     * 兼容laravel5.4
+     * @var array
+     */
     public $events = [
+        'deleting' => 'Sowork\YAuth\Http\Events\YAuthItemDeleting',
+    ];
+
+    public $dispatchesEvents = [
         'deleting' => 'Sowork\YAuth\Http\Events\YAuthItemDeleting',
     ];
 

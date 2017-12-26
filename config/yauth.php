@@ -10,7 +10,7 @@ return [
     /**
      * 缓存key的名称
      */
-    'cacheKey' => 'yauth-rbac',
+    'cacheKey' => env('YAUTH_CACHE_KEY', 'yauth-rbac'),
 
     /**
      * 语言包地址,默认采用cdn，也可以配置资源 vendor/yauth-assets/DataTables-1.10.15/i18n/Chinese.lang

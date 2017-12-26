@@ -54,9 +54,11 @@ trait YAuthItemTrait
         return YAuthItem::when($is_trashed, function ($query){
             return $query->withTrashed();
         })->when($type, function ($query) use ($type){
-            return $query->where('item_type', $type)->get();
+            return $query->where('item_type', $type);
         })->when($name, function ($query) use ($name){
             return $query->where('item_name', $name)->first();
+        }, function ($query){
+            return $query->get();
         });
     }
 
@@ -64,7 +66,7 @@ trait YAuthItemTrait
      * 获取所有角色列表
      */
     public function getRoles($is_trashed = false){
-        return $this->getItems(YAuthItem::TYPE_ROLE, NULL, $is_trashed);
+        return $this->getItems(YAuthItem::TYPE_ROLE, $is_trashed);
     }
 
     /**
@@ -81,6 +83,7 @@ trait YAuthItemTrait
 
     public function getPermission($name, $is_trashed = false){
         $item = $this->getItems(YAuthItem::TYPE_PERMISSION, $is_trashed, $name);
+
         return $item->exists && $item->item_type == 2 ? $item : NULL;
     }
 }

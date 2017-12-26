@@ -18,7 +18,7 @@ class YAuthAssignment extends Model
 
     public $table = 'yauth_assignments';
 
-    public $primaryKey = 'item_name';
+//    public $primaryKey = 'item_name';
 
     public $incrementing = FALSE;
 

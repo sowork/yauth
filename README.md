@@ -3,9 +3,9 @@
 >- 重要：当前版本不稳定，请不要用在项目中
 
 ## 安装
+- composer安装 `composer require sowork/yauth dev-master`
 - 注册:在`config/app.php`文件中`providers`数组中注册提供者 `Sowork\YAuth\YAuthServiceProvider::class,`，在`config/app.php`文件`aliases`数组中注册`'YAuth' => Sowork\YAuth\YAuthServiceProvider::class,`
     
-
 ## 资源发布
 - 默认 `php artisan vendor:publish` 会发布配置文件和数据库迁移文件，单独发布如下。
 - 数据库表迁移 `php artisan migrate`
@@ -43,7 +43,7 @@ YAuth::remove($permission, false) //第二个参数默认FALSE时表示进行软
 - 给用户分配权限/角色
 ```
 $item=YAuthItem::find('IySGxXZhM8Yj99qg');
-YAuth::assign($item, 1);
+YAuth::assign($item, 1, 'guard_name');
 ```
 - 给权限分配给权限
 ```
@@ -61,28 +61,28 @@ YAuth::revoke($item, 1, false) // 第三个参数默认为FALSE，使用软删�
 ```
 - 获取分配给用户所有权限和角色
 ```
-YAuth::getAssignments(1)
-YAuth::getAssignments(1, NULL, false) // 第三个参数默认为false,表示不获取软删除的
+YAuth::getAssignments(1, 'guard_name')
+YAuth::getAssignments(1, 'guard_name', NULL, false) // 第三个参数默认为false,表示不获取软删除的
 ```
 - 获取分配给用户所有角色
 ```
-YAuth::getUserRoles(1)
-YAuth::getUserRoles(1, false) // 默认为false，表示不获取软删除
+YAuth::getUserRoles(1, 'guard_name')
+YAuth::getUserRoles(1, 'guard_name', false) // 默认为false，表示不获取软删除
 ```
 - 获取分配给用户所有权限
 ```
-YAuth::getUserPermissions(1)
-YAuth::getUserPermissions(1, false) // 默认为false，表示不获取软删除
+YAuth::getUserPermissions(1, 'guard_name')
+YAuth::getUserPermissions(1, 'guard_name', false) // 默认为false，表示不获取软删除
 ```
 - 获取分配给用户某个角色对象
 ```
-YAuth::getUserRole(1, '3xhjG5l0WJifkAtt')
-YAuth::getUserRole(1, '3xhjG5l0WJifkAtt', true)
+YAuth::getUserRole(1, 'guard_name' '3xhjG5l0WJifkAtt')
+YAuth::getUserRole(1, 'guard_name', '3xhjG5l0WJifkAtt', true)
 ```
 - 获取分配给用户某个权限对象
 ```
-YAuth::getUserPermission(1, '3xhjG5l0WJifkAtt')
-YAuth::getUserPermission(1, '3xhjG5l0WJifkAtt', true)
+YAuth::getUserPermission(1, 'guard_name', '3xhjG5l0WJifkAtt')
+YAuth::getUserPermission(1, 'guard_name', '3xhjG5l0WJifkAtt', true)
 ```
 - 获取所有items
 ```
@@ -105,10 +105,10 @@ YAuth::getPermission('soiyfnkodynxlldysadfc', false)
 ```
 - 获得单个角色对象
 ```
-YAuth::getRoles('3xhjG5l0WJifkAtt')
-YAuth::getRoles('3xhjG5l0WJifkAtt', false)
+YAuth::getRole('3xhjG5l0WJifkAtt')
+YAuth::getRole('3xhjG5l0WJifkAtt', false)
 ```
-- 检查用户是否存在权限
+- 检查某个用户是否存在权限
 ```
 YAuth::checkAccess(1, '3xhjG5l0WJifkAtt')
 ```
@@ -120,3 +120,5 @@ YAuth::can('3xhjG5l0WJifkAtt')
 ```
 YAuth::invalidateCache();
 ```
+# 交流
+QQ 群： [519661587](https://jq.qq.com/?_wv=1027&k=5hCecLx)

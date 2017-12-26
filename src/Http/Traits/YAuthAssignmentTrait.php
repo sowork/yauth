@@ -17,32 +17,32 @@ use Sowork\YAuth\YAuthItem;
 
 trait YAuthAssignmentTrait
 {
-    public function assign(YAuthItem $item, $user_id){
+    public function assign($user_id, YAuthItem $item, $guard_table){
         $assign = new YAuthAssignment();
         $assign->item_name = $item->item_name;
         $assign->user_id = $user_id;
-        $assign->guard_table = Auth::user()->getGuard();
+        $assign->guard_table = $guard_table;
         $assign->save();
 
         return $assign;
     }
 
     public function revoke(YAuthItem $item, $user_id, $isForceDelete = FALSE){
-            return YAuthAssignment::where([
-                ['item_name', $item->item_name],
-                ['user_id', $user_id]
-            ])->when($isForceDelete, function($query){
-                return $query->forceDelete();
-            }, function ($query){
-                return $query->delete();
-            });
+        return YAuthAssignment::where([
+            ['item_name', $item->item_name],
+            ['user_id', $user_id]
+        ])->when($isForceDelete, function($query){
+            return $query->forceDelete();
+        }, function ($query){
+            return $query->delete();
+        });
     }
 
-    public function getAssignments($user_id, $type = NULL, $is_show_del = FALSE, $item_name = FALSE){
+    public function getAssignments($user_id, $guard_table, $type = NULL, $is_show_del = FALSE, $item_name = FALSE){
         return YAuthAssignment::join('yauth_items', 'yauth_assignments.item_name', '=', 'yauth_items.item_name')
             ->where([
                 ['yauth_assignments.user_id', $user_id],
-                ['yauth_assignments.guard_table', Auth::user()->getGuard()]
+                ['yauth_assignments.guard_table', $guard_table]
             ])->when($type, function ($query) use ($type){
                 return $query->where('yauth_items.item_type', $type);
             })->when($is_show_del, function ($query){
@@ -52,20 +52,20 @@ trait YAuthAssignmentTrait
             })->get();
     }
 
-    public function getUserRoles($user_id, $is_show_del = FALSE){
-        return $this->getAssignments($user_id, YAuthItem::TYPE_ROLE, $is_show_del);
+    public function getUserRoles($user_id, $guard_table, $is_show_del = FALSE){
+        return $this->getAssignments($user_id, $guard_table, YAuthItem::TYPE_ROLE, $is_show_del);
     }
 
-    public function getUserPermissions($user_id, $is_show_del = FALSE){
-        return $this->getAssignments($user_id, YAuthItem::TYPE_PERMISSION, $is_show_del);
+    public function getUserPermissions($user_id, $guard_table, $is_show_del = FALSE){
+        return $this->getAssignments($user_id, $guard_table, YAuthItem::TYPE_PERMISSION, $is_show_del);
     }
 
-    public function getUserRole($user_id, $item_name = FALSE, $is_show_del = FALSE){
-        return $this->getAssignments($user_id, YAuthItem::TYPE_ROLE, $is_show_del, $item_name);
+    public function getUserRole($user_id, $guard_table,  $item_name = FALSE, $is_show_del = FALSE){
+        return $this->getAssignments($user_id, $guard_table, YAuthItem::TYPE_ROLE, $is_show_del, $item_name);
     }
 
-    public function getUserPermission($user_id, $item_name = FALSE, $is_show_del = FALSE){
-        return $this->getAssignments($user_id, YAuthItem::TYPE_ROLE, $is_show_del, $item_name);
+    public function getUserPermission($user_id, $guard_table, $item_name = FALSE, $is_show_del = FALSE){
+        return $this->getAssignments($user_id, $guard_table, YAuthItem::TYPE_ROLE, $is_show_del, $item_name);
     }
 
 }

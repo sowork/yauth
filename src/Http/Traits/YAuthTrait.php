@@ -31,8 +31,8 @@ trait YAuthTrait
         return $item->save();
     }
 
-    public function checkAccess($userId, $permissionName){
-        $userAssignments = $this->getAssignments($userId);
+    public function checkAccess($userId, $permissionName, $guard_name){
+        $userAssignments = $this->getAssignments($userId, $guard_name);
         if(! $userAssignments->count()){
             return false;
         }
@@ -49,6 +49,7 @@ trait YAuthTrait
      * 加载缓存，如果没有缓存，查询并缓存起来
      */
     protected function loadFromCache(){
+        // 只要调用过，同一个操作中下次不再调用
         if($this->itemsChilds){
             return;
         }

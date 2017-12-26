@@ -20,7 +20,7 @@ interface YAuthAssignmentInterface
      * @param $user_id
      * @return mixed
      */
-    public function assign(YAuthItem $item, $user_id);
+    public function assign($user_id, YAuthItem $item, $guard_table);
 
     /**
      * 删除用户权限
@@ -37,17 +37,17 @@ interface YAuthAssignmentInterface
      * @param $item_name
      * @return mixed
      */
-    public function getAssignments($user_id, $type = NULL, $is_show_del = FALSE, $item_name = FALSE);
+    public function getAssignments($user_id, $guard_table, $type = NULL, $is_show_del = FALSE, $item_name = FALSE);
 
     /**
      * 只获取用户分配角色
      */
-    public function getUserRoles($user_id, $is_show_del = FALSE);
+    public function getUserRoles($user_id, $guard_table, $is_show_del = FALSE);
 
     /**
      * 只获取用户分配权限
      */
-    public function getUserPermissions($user_id, $is_show_del = FALSE);
+    public function getUserPermissions($user_id, $guard_table, $is_show_del = FALSE);
 
     /**
      * 获取用户某一个角色
@@ -55,7 +55,7 @@ interface YAuthAssignmentInterface
      * @param $role_name
      * @return mixed
      */
-    public function getUserRole($user_id, $item_name = FALSE, $is_show_del = FALSE);
+    public function getUserRole($user_id, $guard_table, $item_name = FALSE, $is_show_del = FALSE);
 
     /**
      * 获取用户某一个权限
@@ -63,5 +63,5 @@ interface YAuthAssignmentInterface
      * @param $permission_name
      * @return mixed
      */
-    public function getUserPermission($user_id, $item_name = FALSE, $is_show_del = FALSE);
+    public function getUserPermission($user_id, $guard_table, $item_name = FALSE, $is_show_del = FALSE);
 }

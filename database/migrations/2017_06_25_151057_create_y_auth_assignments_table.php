@@ -14,14 +14,15 @@ class CreateYAuthAssignmentsTable extends Migration
     public function up()
     {
         Schema::create('yauth_assignments', function (Blueprint $table){
+            $table->engine = 'innoDB';
             $table->string('item_name'); // 关联权限
             $table->unsignedInteger('user_id'); // 用户ID
             $table->string('guard_table'); // 用户的guard名称
             $table->softDeletes();
             $table->timestamps();
 
-            $table->primary(['item_name', 'user_id']);
             $table->foreign('item_name')->references('item_name')->on('yauth_items');
+            $table->primary(['item_name', 'user_id']);
         });
     }
 

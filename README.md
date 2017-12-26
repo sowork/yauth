@@ -1,6 +1,5 @@
 # yauth 
 > larave5 RBAC权限管理
->- 重要：当前版本不稳定，请不要用在项目中
 
 ## 安装
 - composer安装 `composer require sowork/yauth dev-master`

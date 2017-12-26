@@ -33,7 +33,7 @@ class YAuthServiceProvider extends ServiceProvider
         });
         // 发布配置
         $this->publishes([
-            __DIR__ . '/../config' => config_path(),
+            __DIR__ . '/../config' => base_path('config'),
         ], 'yauth-config');
 
     }

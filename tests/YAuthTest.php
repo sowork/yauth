@@ -14,7 +14,7 @@ use \Illuminate\Foundation\Testing\DatabaseTransactions;
 class YAuthTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
-//    use DatabaseTransactions;
+    use DatabaseTransactions;
 
     public function testCreatePermissions(){
         $permission=YAuth::createPermission(str_random());

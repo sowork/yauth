@@ -38,10 +38,6 @@ class YAuthTest extends TestCase
         YAuth::add($permission);
 
         $permission->item_desc = 'update desc';
-//
-//        $permission->item_desc = 'permission desc6';
-//        $permission = \Sowork\YAuth\YAuthItem::find('1O6ZYBkT23bFXCDk');
-//        $permission->item_desc = 'asdfasdf';
 
         $this->assertEquals(1, YAuth::update($permission));
     }
@@ -52,7 +48,6 @@ class YAuthTest extends TestCase
         YAuth::add($permission);
 
         $this->assertTrue(YAuth::remove($permission));
-        $this->assertTrue(YAuth::remove($permission, true));
 
         // 测试递归删除
         $permission2 = YAuth::createPermission(str_random());
@@ -101,8 +96,8 @@ class YAuthTest extends TestCase
 
         YAuth::assign(1, $permission, 'users');
 
-        $this->assertEquals(1, YAuth::revoke($permission, 1));
-        $this->assertEquals(1, YAuth::revoke($permission, 1, true));
+        $this->assertEquals(1, YAuth::revoke(1, $permission));
+        $this->assertEquals(1, YAuth::revoke(1, $permission, true));
     }
 
     public function testGetAssignments(){

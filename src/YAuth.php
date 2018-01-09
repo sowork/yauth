@@ -39,10 +39,20 @@ class YAuth implements YAuthItemsInterface, YAuthItemsChildInterface, YAuthInter
     protected $itemsChilds;
 
     /**
+ * 使用的guard
+ */
+    protected $provider;
+
+    /**
      * 默认运行迁移
      * @var bool
      */
     public static $runsMigrations = true;
+
+    public function __construct()
+    {
+        $this->provider = config('auth.guards.' . config('auth.defaults.guard') . '.provider');
+    }
 
     /**
      * 配置yauth不使用默认迁移

@@ -26,21 +26,24 @@ class YAuthItemDeleting
     public function __construct(YAuthItem $item)
     {
         // 外键约束处理
-        $ditems = YAuthItemChild::where('item_name', $item->item_name)->withTrashed()->get();
-        if(!$ditems->isEmpty()){
-            $ditems->map(function ($ditem) use ($item){
+        $relations_items = YAuthItemChild::where('item_name', $item->item_name)->withTrashed()->get();
+
+        if(!$relations_items->isEmpty()){
+            $relations_items->map(function ($ditem) use ($item){
                 // lrv结构更新
                 LRV::deleteLRV($ditem, $item->isForceDeleting());
             });
-            // 更新角色
-            YAuthAssignment::where('item_name', $item->item_name)
-                ->when($item->isForceDeleting(), function ($query){
-                    return $query->withTrashed()
-                        ->forceDelete();
-                }, function ($query){
-                    return $query->delete();
-                });
         }
+
+        // 更新角色
+        YAuthAssignment::where('item_name', $item->item_name)
+            ->when($item->isForceDeleting(), function ($query) {
+                return $query->withTrashed()
+                    ->forceDelete();
+            }, function ($query) {
+                return $query->delete();
+            });
+
     }
 
     /**

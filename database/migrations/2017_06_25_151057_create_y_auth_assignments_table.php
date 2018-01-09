@@ -17,7 +17,7 @@ class CreateYAuthAssignmentsTable extends Migration
             $table->engine = 'innoDB';
             $table->string('item_name'); // 关联权限
             $table->unsignedInteger('user_id'); // 用户ID
-            $table->string('guard_table'); // 用户的guard名称
+            $table->string('guard'); // 用户的guard名称
             $table->softDeletes();
             $table->timestamps();
 

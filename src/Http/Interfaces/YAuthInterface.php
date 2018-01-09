@@ -35,5 +35,5 @@ interface YAuthInterface
      * @param array $params
      * @return mixed
      */
-    public function checkAccess($user_id, $permission_name, $guard_name);
+    public function checkAccess($user_id, $permission_name, $provider);
 }

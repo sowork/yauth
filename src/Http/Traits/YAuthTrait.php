@@ -12,6 +12,7 @@ namespace Sowork\YAuth\Http\Traits;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Sowork\YAuth\YAuthItem;
 use Sowork\YAuth\YAuthItemChild;
 
@@ -19,7 +20,9 @@ trait YAuthTrait
 {
     public function remove(Model $item, $isForceDelete = FALSE){
         if($isForceDelete){
-            return $item->forceDelete();
+            return DB::transaction(function () use ($item, $isForceDelete){
+                return $item->forceDelete();
+            });
         }else{
             return $item->delete();
         }
@@ -28,11 +31,12 @@ trait YAuthTrait
     public function update(Model $item){
         if(!$item->exists)
             return;
+
         return $item->save();
     }
 
-    public function checkAccess($userId, $permissionName, $guard_name){
-        $userAssignments = $this->getAssignments($userId, $guard_name);
+    public function checkAccess($userId, $permissionName, $provider = null){
+        $userAssignments = $this->getAssignments($userId, $provider ?: $provider);
         if(! $userAssignments->count()){
             return false;
         }
@@ -41,8 +45,8 @@ trait YAuthTrait
         return $this->checkAccessFromCache($permissionName, $userAssignments);
     }
 
-    public function can($permissionName){
-        return $this->checkAccess(Auth::id(), $permissionName);
+    public function can($permissionName, $provider = null){
+        return $this->checkAccess(Auth::id(), $permissionName, $provider);
     }
 
     /**
@@ -59,12 +63,14 @@ trait YAuthTrait
             return;
         }
 
+        $data[0] = $data[1] = [];
         foreach (YAuthItem::all() as $item){
             $data[0][$item->item_name] = $item;
         }
         foreach (YAuthItemChild::all() as $itemChild){
             $data[1][$itemChild->item_name] = $itemChild;
         }
+
         list($this->items, $this->itemsChilds) = $data;
         Cache::forever(config('yauth.cacheKey'), $data);
     }

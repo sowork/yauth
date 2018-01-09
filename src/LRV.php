@@ -9,7 +9,9 @@
 namespace Sowork\YAuth;
 
 
+use http\Exception\InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class LRV extends Model
 {
@@ -17,6 +19,7 @@ class LRV extends Model
      * 添加一个LRV item
      */
     public static function addLRV(Model $instance, Model $node, $parent_id){
+        $parent = null;
         if(!$parent_id){
             $maxRight = $instance->withTrashed()->max('rgt');
             if($maxRight){
@@ -41,25 +44,30 @@ class LRV extends Model
             if($childNode){
                 throw new InvalidArgumentException('Cannot repeat add ' . $node->item_name . ' to ' . $parent->item_name);
             }
+
             // 添加子节点
             $instance->lft = $parent->rgt;
             $instance->rgt = $parent->rgt + 1;
-
-            // 所有右值满足>=$node['right'] 值 +=2
-            $instance->where('rgt', '>=', $parent->rgt)
-                ->withTrashed()
-                ->increment('rgt', 2);
-
-            // 所有左值修改>$node['right'] 值 +=2
-            $instance->where('lft', '>', $parent->rgt)
-                ->withTrashed()
-                ->increment('lft', 2);
             $instance->item_name = $node->item_name;
             $instance->parent_id = $parent_id;
             $instance->depth = $parent->depth + 1;
         }
 
-        $instance->save();
+        return DB::transaction(function () use ($instance, $parent){
+            if($parent){
+                // 所有右值满足>=$node['right'] 值 +=2
+                $instance->where('rgt', '>=', $parent->rgt)
+                    ->withTrashed()
+                    ->increment('rgt', 2);
+
+                // 所有左值修改>$node['right'] 值 +=2
+                $instance->where('lft', '>', $parent->rgt)
+                    ->withTrashed()
+                    ->increment('lft', 2);
+            }
+
+            return $instance->save();
+        });
     }
 
     /**

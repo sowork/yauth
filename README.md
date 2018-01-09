@@ -11,7 +11,14 @@
 - 如果你不想使用默认yauth的数据库表，或者想基于yauth表进行修改，需要在`AppServiceProvider`的`register`方法中调用`YAuth::ignoreMigrations();`使用`php artisan vendor:publish --tag=yauth-migrations`导出默认迁移表
 - 配置文件发布 `php artisan vendor:publish --tag=yauth-config`
 
-### API调用
+## 中间件
+- 注册中间件`'yauth' => \Sowork\YAuth\Http\Middleware\YAuthAuthorize::class,`到`app/Http/Kernel.php` `$routeMiddleware`数组中
+- 在需要权限的路由、路由组添加`yauth`中间件即可进行权限判断
+- 在`app/Exceptions/Handler.php`监听`YAuthNotPermissionException`判断无权限回调
+
+## API调用
+> 建议： 权限名称以 路由名称为准，防止资源路由url相同导致的问题
+
 - 添加权限
 ```
 $permission=YAuth::createPermission('IySGxXZhM8Yj99qg');
@@ -42,7 +49,7 @@ YAuth::remove($permission, false) //第二个参数默认FALSE时表示进行软
 - 给用户分配权限/角色
 ```
 $item=YAuthItem::find('IySGxXZhM8Yj99qg');
-YAuth::assign($item, 1, 'guard_name');
+YAuth::assign(1,$item);
 ```
 - 给权限分配给权限
 ```
@@ -55,33 +62,34 @@ YAuth::addChild($role, $permission);
 - 移除角色权限
 ```
 $item = YAuthItem::find('3xhjG5l0WJifkAtt');
-YAuth::revoke($item, 1);
-YAuth::revoke($item, 1, false) // 第三个参数默认为FALSE，使用软删除
+YAuth::revoke(1, $item);
+YAuth::revoke(1, $item, null) // 第三个参数provider, e.g 'users' 代表users表 'xxx' 代表admins表， 默认为users
+YAuth::revoke(1, $item, null, false) // 第四个参数默认为FALSE，使用软删除
 ```
 - 获取分配给用户所有权限和角色
 ```
-YAuth::getAssignments(1, 'guard_name')
-YAuth::getAssignments(1, 'guard_name', NULL, false) // 第三个参数默认为false,表示不获取软删除的
+YAuth::getAssignments(1)
+YAuth::getAssignments(1, null, null, false) // 第四个参数默认为false,默认表示不获取软删除的
 ```
 - 获取分配给用户所有角色
 ```
-YAuth::getUserRoles(1, 'guard_name')
-YAuth::getUserRoles(1, 'guard_name', false) // 默认为false，表示不获取软删除
+YAuth::getUserRoles(1)
+YAuth::getUserRoles(1, null, false) // 默认为false，表示不获取软删除
 ```
 - 获取分配给用户所有权限
 ```
-YAuth::getUserPermissions(1, 'guard_name')
-YAuth::getUserPermissions(1, 'guard_name', false) // 默认为false，表示不获取软删除
+YAuth::getUserPermissions(1, 'provider')
+YAuth::getUserPermissions(1, 'provider', false) // 默认为false，表示不获取软删除
 ```
 - 获取分配给用户某个角色对象
 ```
-YAuth::getUserRole(1, 'guard_name' '3xhjG5l0WJifkAtt')
-YAuth::getUserRole(1, 'guard_name', '3xhjG5l0WJifkAtt', true)
+YAuth::getUserRole(1, 'provider' '3xhjG5l0WJifkAtt')
+YAuth::getUserRole(1, 'provider', '3xhjG5l0WJifkAtt', true)
 ```
 - 获取分配给用户某个权限对象
 ```
-YAuth::getUserPermission(1, 'guard_name', '3xhjG5l0WJifkAtt')
-YAuth::getUserPermission(1, 'guard_name', '3xhjG5l0WJifkAtt', true)
+YAuth::getUserPermission(1, 'provider', '3xhjG5l0WJifkAtt')
+YAuth::getUserPermission(1, 'provider', '3xhjG5l0WJifkAtt', true)
 ```
 - 获取所有items
 ```
@@ -90,26 +98,26 @@ YAuth::getItems()
 - 获取所有权限
 ```
 YAuth::getPermissions()
-YAuth::getPermissions(false)
+YAuth::getPermissions(false) // false 代表不获取软删除的
 ```
 - 获取所有角色
 ```
 YAuth::getRoles()
-YAuth::getRoles(false)
+YAuth::getRoles(false) // false 代表不获取软删除的
 ```
 - 获取单个权限对象
 ```
 YAuth::getPermission('soiyfnkodynxlldysadfc')
-YAuth::getPermission('soiyfnkodynxlldysadfc', false)
+YAuth::getPermission('soiyfnkodynxlldysadfc', false) // false 代表不获取软删除的
 ```
 - 获得单个角色对象
 ```
 YAuth::getRole('3xhjG5l0WJifkAtt')
-YAuth::getRole('3xhjG5l0WJifkAtt', false)
+YAuth::getRole('3xhjG5l0WJifkAtt', false) // false 代表不获取软删除的
 ```
 - 检查某个用户是否存在权限
 ```
-YAuth::checkAccess(1, '3xhjG5l0WJifkAtt')
+YAuth::checkAccess(1, '3xhjG5l0WJifkAtt') 
 ```
 - 检查当前登录用户是否存在权限
 ```
@@ -119,5 +127,3 @@ YAuth::can('3xhjG5l0WJifkAtt')
 ```
 YAuth::invalidateCache();
 ```
-# 交流
-QQ 群： [519661587](https://jq.qq.com/?_wv=1027&k=5hCecLx)

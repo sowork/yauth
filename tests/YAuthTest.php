@@ -97,7 +97,7 @@ class YAuthTest extends TestCase
         YAuth::assign(1, $permission, 'users');
 
         $this->assertEquals(1, YAuth::revoke(1, $permission));
-        $this->assertEquals(1, YAuth::revoke(1, $permission, true));
+        $this->assertEquals(1, YAuth::revoke(1, $permission, null, true));
     }
 
     public function testGetAssignments(){

@@ -9,9 +9,6 @@
 namespace Sowork\YAuth\Http\Traits;
 
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Sowork\YAuth\YAuthAssignment;
 use Sowork\YAuth\YAuthItem;
 
@@ -19,9 +16,9 @@ trait YAuthAssignmentTrait
 {
     public function assign($user_id, YAuthItem $item, $provider = null){
         $assign = new YAuthAssignment();
-        $assign->item_name = $item->item_name;
+        $assign->item_id = $item->id;
         $assign->user_id = $user_id;
-        $assign->guard = $provider ?: $this->provider;
+        $assign->provider = $provider ?: $this->provider;
         $assign->save();
 
         return $assign;
@@ -29,9 +26,9 @@ trait YAuthAssignmentTrait
 
     public function revoke($user_id, YAuthItem $item, $provider = null, $isForceDelete = false){
         return YAuthAssignment::where([
-            ['item_name', $item->item_name],
+            ['item_id', $item->id],
             ['user_id', $user_id],
-            ['guard', $provider ?: $this->provider],
+            ['provider', $provider ?: $this->provider],
         ])->when($isForceDelete, function($query){
             return $query->forceDelete();
         }, function ($query){
@@ -40,10 +37,11 @@ trait YAuthAssignmentTrait
     }
 
     public function getAssignments($user_id, $provider = null, $type = false, $is_show_del = false, $item_name = false){
-        return YAuthAssignment::join('yauth_items', 'yauth_assignments.item_name', '=', 'yauth_items.item_name')
+        return YAuthAssignment::select('yauth_assignments.*', 'yauth_items.item_name', 'yauth_items.item_type', 'yauth_items.item_desc')
+            ->join('yauth_items', 'yauth_assignments.item_id', '=', 'yauth_items.id')
             ->where([
                 ['yauth_assignments.user_id', $user_id],
-                ['yauth_assignments.guard', $provider ?: $this->provider]
+                ['yauth_assignments.provider', $provider ?: $this->provider]
             ])->when($type, function ($query) use ($type){
                 return $query->where('yauth_items.item_type', $type);
             })->when($is_show_del, function ($query){

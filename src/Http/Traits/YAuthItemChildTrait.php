@@ -26,12 +26,12 @@ trait YAuthItemChildTrait
             throw new InvalidArgumentException('Cannot add a role as a child of a permission');
         }
         // 查找当前父节点是否存在
-        $itemChild = YAuthItemChild::where('item_name', $parent->item_name)->first();
+        $itemChild = YAuthItemChild::where('item_id', $parent->id)->first();
         if(!$itemChild){ // 添加顶级item
             $node = YAuthItemChild::addItem($parent);
-            YAuthItemChild::addItem($child, $node->ichild_id);
+            YAuthItemChild::addItem($child, $node->id);
         }else{ // 添加子节点
-            YAuthItemChild::addItem($child, $itemChild->ichild_id);
+            YAuthItemChild::addItem($child, $itemChild->id);
         }
 
         return TRUE;

@@ -18,11 +18,9 @@ class YAuthItemChild extends Model
 
     public $table = 'yauth_items_childs';
 
-    public $primaryKey = 'ichild_id';
-
     public $timestamps = FALSE;
 
-    public $guarded = ['parent_id', 'lft', 'rgt', 'depth'];
+    public $guarded = ['id', 'parent_id', 'lft', 'rgt', 'depth'];
 
     public static function addItem(YAuthItem $node, $parent_id = 0){
         return tap(self::newModelInstance(), function($instance) use ($node, $parent_id){

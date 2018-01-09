@@ -29,7 +29,8 @@ class LRV extends Model
                 $instance->lft = 1;
                 $instance->rgt = 2;
             }
-            $instance->item_name = $node->item_name;
+
+            $instance->item_id = $node->id;
             $instance->parent_id = $parent_id;
             $instance->depth = 0;
         }else{
@@ -37,7 +38,7 @@ class LRV extends Model
             $childNode = $instance->where([
                 ['lft', '>', $parent->lft],
                 ['rgt', '<', $parent->rgt],
-                ['item_name', $node->item_name]
+                ['item_id', $node->id]
             ])->withTrashed()
                 ->first();
 
@@ -48,7 +49,7 @@ class LRV extends Model
             // 添加子节点
             $instance->lft = $parent->rgt;
             $instance->rgt = $parent->rgt + 1;
-            $instance->item_name = $node->item_name;
+            $instance->item_id = $node->id;
             $instance->parent_id = $parent_id;
             $instance->depth = $parent->depth + 1;
         }

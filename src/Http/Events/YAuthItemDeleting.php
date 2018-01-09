@@ -26,7 +26,7 @@ class YAuthItemDeleting
     public function __construct(YAuthItem $item)
     {
         // 外键约束处理
-        $relations_items = YAuthItemChild::where('item_name', $item->item_name)->withTrashed()->get();
+        $relations_items = YAuthItemChild::where('item_id', $item->id)->withTrashed()->get();
 
         if(!$relations_items->isEmpty()){
             $relations_items->map(function ($ditem) use ($item){
@@ -36,7 +36,7 @@ class YAuthItemDeleting
         }
 
         // 更新角色
-        YAuthAssignment::where('item_name', $item->item_name)
+        YAuthAssignment::where('item_id', $item->id)
             ->when($item->isForceDeleting(), function ($query) {
                 return $query->withTrashed()
                     ->forceDelete();

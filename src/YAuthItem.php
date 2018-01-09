@@ -22,10 +22,6 @@ class YAuthItem extends Model
 
     public $table = 'yauth_items';
 
-    public $primaryKey = 'item_name';
-
-    public $incrementing = FALSE;
-
     public $dates = ['deleted_at'];
 
     /**

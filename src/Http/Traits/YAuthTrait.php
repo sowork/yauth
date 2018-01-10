@@ -82,7 +82,6 @@ trait YAuthTrait
         if(!isset($this->items[$permissionName])){
             return false;
         }
-        dd($assignments);
 
         // 判断该用户是否拥有顶级角色或权限
         if($assignments->contains('item_name', $permissionName)){

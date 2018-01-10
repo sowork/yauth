@@ -20,12 +20,13 @@ trait YAuthAssignmentTrait
         $assign->user_id = $user_id;
         $assign->provider = $provider ?: $this->provider;
         $assign->save();
+        $this->autoUpdateCache();
 
         return $assign;
     }
 
     public function revoke($user_id, YAuthItem $item, $provider = null, $isForceDelete = false){
-        return YAuthAssignment::where([
+        YAuthAssignment::where([
             ['item_id', $item->id],
             ['user_id', $user_id],
             ['provider', $provider ?: $this->provider],
@@ -34,6 +35,9 @@ trait YAuthAssignmentTrait
         }, function ($query){
             return $query->delete();
         });
+
+        $this->autoUpdateCache();
+        return true;
     }
 
     public function getAssignments($user_id, $provider = null, $type = false, $is_show_del = false, $item_name = false){

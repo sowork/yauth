@@ -51,10 +51,6 @@ YAuth::remove($permission, false) //第二个参数默认FALSE时表示进行软
 $item=YAuthItem::find('IySGxXZhM8Yj99qg');
 YAuth::assign(1,$item);
 ```
-- 给权限分配给权限
-```
-YAuth::addChild($permission, $permission);
-```
 - 给角色分配给权限
 ```
 YAuth::addChild($role, $permission);
@@ -123,7 +119,7 @@ YAuth::checkAccess(1, '3xhjG5l0WJifkAtt')
 ```
 YAuth::can('3xhjG5l0WJifkAtt')
 ```
-- 刷新权限，默认删除、修改、增加权限不会更新缓存，需要手动调用
+- 刷新权限，默认会自动更新缓存，可以在配置文件`yauth.php`配置
 ```
 YAuth::invalidateCache();
 ```

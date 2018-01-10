@@ -16,4 +16,6 @@ return [
      * 语言包地址,默认采用cdn，也可以配置资源 vendor/yauth-assets/DataTables-1.10.15/i18n/Chinese.lang
      */
 //    'languageUrl' => '//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+
+    'auto_update_cache' => env('AUTO_UPDATE_CACHE', true),
 ];

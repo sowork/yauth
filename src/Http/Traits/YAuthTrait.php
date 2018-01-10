@@ -9,6 +9,7 @@
 namespace Sowork\YAuth\Http\Traits;
 
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -20,19 +21,25 @@ trait YAuthTrait
 {
     public function remove(Model $item, $isForceDelete = FALSE){
         if($isForceDelete){
-            return DB::transaction(function () use ($item, $isForceDelete){
-                return $item->forceDelete();
+            DB::transaction(function () use ($item, $isForceDelete){
+                $item->forceDelete();
             });
         }else{
-            return $item->delete();
+            $item->delete();
         }
+
+        $this->autoUpdateCache();
+        return true;
     }
 
     public function update(Model $item){
         if(!$item->exists)
             return;
 
-        return $item->save();
+        $item->save();
+        $this->autoUpdateCache();
+
+        return true;
     }
 
     public function checkAccess($userId, $permissionName, $provider = null){
@@ -46,6 +53,9 @@ trait YAuthTrait
     }
 
     public function can($permissionName, $provider = null){
+        if(!Auth::id()){
+            throw new AuthenticationException('Unauthenticated.');
+        }
         return $this->checkAccess(Auth::id(), $permissionName, $provider);
     }
 
@@ -65,10 +75,10 @@ trait YAuthTrait
 
         $data[0] = $data[1] = [];
         foreach (YAuthItem::all() as $item){
-            $data[0][$item->item_name] = $item;
+            $data[0][$item->id] = $item;
         }
         foreach (YAuthItemChild::all() as $itemChild){
-            $data[1][$itemChild->item_name] = $itemChild;
+            $data[1][$itemChild->item_id] = $itemChild;
         }
 
         list($this->items, $this->itemsChilds) = $data;
@@ -79,22 +89,25 @@ trait YAuthTrait
      * 从缓存中检查权限是否存在
      */
     protected function checkAccessFromCache($permissionName, $assignments){
-        if(!isset($this->items[$permissionName])){
+        if(! $permission = $this->validatePermission(collect($this->items), $permissionName)){
             return false;
         }
 
         // 判断该用户是否拥有顶级角色或权限
-        if($assignments->contains('item_name', $permissionName)){
+        if($this->validatePermission($assignments, $permissionName)){
             return true;
         }
+
         // 判断该用户权限是否为角色包含的权限
-        if(!isset($this->itemsChilds[$permissionName])){
+//        if(!isset($this->itemsChilds[$permission->id]) || $this->itemsChilds[$permission->id]->item_type !== YAuthItem::TYPE_ROLE){
+        if(!isset($this->itemsChilds[$permission->id])){
             return false;
         }
-        $item = $this->itemsChilds[$permissionName];
+        $item = $this->itemsChilds[$permission->id];
         foreach ($this->itemsChilds as $itemChild) {
             if($itemChild->lft < $item->lft && $itemChild->rgt > $item->rgt){
-                if($assignments->contains('item_name', $itemChild->item_name)){
+                $temp = $this->items[$itemChild->item_id];
+                if($this->validatePermission($assignments, $temp->item_name)){
                     return true;
                 }
             }
@@ -102,8 +115,25 @@ trait YAuthTrait
         return false;
     }
 
+    private function validatePermission($collectPermission, $permissionName){
+        $permission = null;
+        $collectPermission->contains(function ($value) use ($permissionName, &$permission){
+            if(preg_match('/^' . $value->item_name . '$/', $permissionName)){
+                $permission = $value;
+                return true;
+            }
+            return false;
+        });
+        return $permission;
+    }
+
     public function invalidateCache(){
         Cache::forget(config('yauth.cacheKey'));
     }
 
+    public function autoUpdateCache(){
+        if(config('yauth.auto_update_cache')){
+            $this->invalidateCache();
+        }
+    }
 }

@@ -43,7 +43,10 @@ trait YAuthItemTrait
     }
 
     public function add(YAuthItem $yAuthManager){
-        return $yAuthManager->save();
+        $yAuthManager->save();
+        $this->autoUpdateCache();
+
+        return true;
     }
 
     /**

@@ -210,9 +210,9 @@ class YAuthTest extends TestCase
     }
 
     public function testInvalidateCache(){
-        YAuth::checkAccess(1, str_random(), 'users');
         YAuth::invalidateCache();
         $result = \Illuminate\Support\Facades\Cache::get(config('yauth.cacheKey'));
         $this->assertNull($result);
     }
+
 }

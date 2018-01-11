@@ -55,6 +55,16 @@ YAuth::assign(1,$item);
 ```
 YAuth::addChild($role, $permission);
 ```
+- 删除角色某一个权限
+```
+YAuth::removeChild($role, $permission);
+YAuth::removeChild($role, $permission, false); // 默认为软删除
+```
+- 删除角色下全部权限
+```
+YAuth::removeChildren($role);
+YAuth::removeChildren($role, false); // 默认为软删除
+```
 - 移除角色权限
 ```
 $item = YAuthItem::find('3xhjG5l0WJifkAtt');

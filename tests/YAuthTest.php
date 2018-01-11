@@ -20,10 +20,6 @@ class YAuthTest extends TestCase
         $permission=YAuth::createPermission(str_random());
         $permission->item_desc = 'permission desc';
         $this->assertTrue(YAuth::add($permission));
-
-        $permission = YAuth::createPermission(str_random());
-        $permission->item_desc = 'permission desc';
-        $this->assertTrue(YAuth::add($permission));
     }
 
     public function testCreateRole(){
@@ -50,9 +46,9 @@ class YAuthTest extends TestCase
         $this->assertTrue(YAuth::remove($permission));
 
         // 测试递归删除
-        $permission2 = YAuth::createPermission(str_random());
-        $permission2->item_desc = 'testDeleteItem permission desc2';
-        YAuth::add($permission2);
+        $role1 = YAuth::createRole(str_random());
+        $role1->item_desc = 'testDeleteItem permission desc2';
+        YAuth::add($role1);
 
         $permission3 = YAuth::createPermission(str_random());
         $permission3->item_desc = 'testDeleteItem permission desc3';
@@ -62,9 +58,8 @@ class YAuthTest extends TestCase
         $permission4->item_desc = 'testDeleteItem permission desc4';
         YAuth::add($permission4);
 
-        YAuth::addChild($permission2, $permission3);
-        YAuth::addChild($permission2, $permission4);
-        YAuth::addChild($permission3, $permission4);
+        YAuth::addChild($role1, $permission3);
+        YAuth::addChild($role1, $permission4);
 
         YAuth::assign(1, $permission4, 'users');
 
@@ -85,8 +80,45 @@ class YAuthTest extends TestCase
         $role->item_desc = 'testAddChild role desc';
         YAuth::add($role);
 
-        $this->assertTrue(YAuth::addChild($permission, $permission2));
         $this->assertTrue(YAuth::addChild($role, $permission));
+
+        $this->expectException(Psr\Log\InvalidArgumentException::class);
+        YAuth::addChild($permission, $permission2);
+    }
+
+    public function testRemoveChild(){
+        $permission = YAuth::createPermission(str_random());
+        $permission->item_desc = 'testAddChild permission desc';
+        YAuth::add($permission);
+
+        $role = YAuth::createRole(str_random());
+        $role->item_desc = 'testAddChild role desc';
+        YAuth::add($role);
+
+        YAuth::addChild($role, $permission);
+
+        $this->assertEquals('2', YAuth::removeChild($role, $permission));
+        $this->assertEquals('2', YAuth::removeChild($role, $permission, true));
+    }
+
+    public function testRemoveChildren(){
+        $permission = YAuth::createPermission(str_random());
+        $permission->item_desc = 'testAddChild permission desc';
+        YAuth::add($permission);
+
+        $permission2 = YAuth::createPermission(str_random());
+        $permission2->item_desc = 'testAddChild permission desc2';
+        YAuth::add($permission2);
+
+        $role = YAuth::createRole(str_random());
+        $role->item_desc = 'testAddChild role desc';
+        YAuth::add($role);
+
+        YAuth::addChild($role, $permission);
+        YAuth::addChild($role, $permission2);
+
+        $this->assertEquals('2', YAuth::removeChildren($role));
+        $this->assertEquals('2', YAuth::removeChildren($role, true));
     }
 
     public function testRevoke(){

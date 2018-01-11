@@ -16,15 +16,13 @@ class CreateYAuthItemsChildsTable extends Migration
         // 授权条目层次关系表
         Schema::create('yauth_items_childs', function (Blueprint $table){
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->unsignedInteger('item_id'); // items 名称
-            $table->unsignedInteger('parent_id')->index(); // 父节点ID
-            $table->unsignedInteger('lft')->index(); // 左值
-            $table->unsignedInteger('rgt')->index(); // 右值
-            $table->unsignedInteger('depth'); // 深度
+            $table->unsignedInteger('parent_item_id');
+            $table->unsignedInteger('child_item_id')->index();
             $table->softDeletes();
 
-            $table->foreign('item_id')->references('id')->on('yauth_items');
+            $table->primary(['parent_item_id', 'child_item_id']);
+            $table->foreign('parent_item_id')->references('id')->on('yauth_items');
+            $table->foreign('child_item_id')->references('id')->on('yauth_items');
         });
     }
 

@@ -20,7 +20,7 @@ use Sowork\YAuth\Http\Traits\YAuthItemChildTrait;
 use Sowork\YAuth\Http\Traits\YAuthItemTrait;
 use Sowork\YAuth\Http\Traits\YAuthTrait;
 
-class YAuth implements YAuthItemsInterface, YAuthItemsChildInterface, YAuthInterface, YAuthAssignmentInterface
+class YAuth
 {
     use YAuthItemTrait;
     use YAuthItemChildTrait;

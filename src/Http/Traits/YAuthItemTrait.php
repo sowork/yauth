@@ -9,6 +9,8 @@
 namespace Sowork\YAuth\Http\Traits;
 
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Sowork\YAuth\YAuthItem;
 use Sowork\YAuth\YAuthPermission;
 use Sowork\YAuth\YAuthRole;
@@ -44,6 +46,27 @@ trait YAuthItemTrait
 
     public function add(YAuthItem $yAuthManager){
         $yAuthManager->save();
+        $this->autoUpdateCache();
+
+        return true;
+    }
+
+    public function remove(Model $item, $isForceDelete = FALSE){
+        if($isForceDelete){
+            $item->forceDelete();
+        }else{
+            $item->delete();
+        }
+
+        $this->autoUpdateCache();
+        return true;
+    }
+
+    public function update(Model $item){
+        if(!$item->exists)
+            return;
+
+        $item->save();
         $this->autoUpdateCache();
 
         return true;

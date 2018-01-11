@@ -22,4 +22,21 @@ interface YAuthItemsChildInterface
      */
     public function addChild(YAuthItem $parent, YAuthItem $child);
 
+    /**
+     * 从它的父节点中删除一个子节点
+     * @param $parentItem
+     * @param $childItem
+     * @param bool $isForceDelete
+     * @return mixed
+     */
+    public function removeChild($parentItem, $childItem, $isForceDelete = false);
+
+    /**
+     * 从父节点上删除所有子节点
+     * @param $parentItem
+     * @param bool $isForceDelete
+     * @return mixed
+     */
+    public function removeChildren($parentItem, $isForceDelete = false);
+
 }

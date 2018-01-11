@@ -9,6 +9,7 @@
 namespace Sowork\YAuth\Http\Interfaces;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Sowork\YAuth\YAuthItem;
 
 interface YAuthItemsInterface
@@ -40,6 +41,16 @@ interface YAuthItemsInterface
      * @param $yAuthItem YAuthItem
      */
     public function add(YAuthItem $yAuthItem);
+
+    /**
+     * 移除一个权限或角色
+     */
+    public function remove(Model $item);
+
+    /**
+     * 修改角色、权限
+     */
+    public function update(Model $item);
 
     /**
      * 获取所有Item

@@ -20,11 +20,5 @@ class YAuthItemChild extends Model
 
     public $timestamps = FALSE;
 
-    public $guarded = ['id', 'parent_id', 'lft', 'rgt', 'depth'];
-
-    public static function addItem(YAuthItem $node, $parent_id = 0){
-        return tap(self::newModelInstance(), function($instance) use ($node, $parent_id){
-            LRV::addLRV($instance, $node, $parent_id);
-        });
-    }
+    public $guarded = [];
 }

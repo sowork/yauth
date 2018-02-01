@@ -19,7 +19,7 @@ trait YAuthTrait
 {
 
     public function checkAccess($userId, $permissionName, $provider = null){
-        $userAssignments = $this->getAssignments($userId, $provider ?: $provider);
+        $userAssignments = $this->getAssignments($userId, $provider);
         if(! $userAssignments->count()){
             return false;
         }

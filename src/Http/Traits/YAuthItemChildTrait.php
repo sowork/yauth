@@ -27,10 +27,6 @@ trait YAuthItemChildTrait
             throw new InvalidArgumentException('Cannot add a role as a child of a permission');
         }
 
-        if($parent instanceof YAuthPermission && $child instanceof YAuthPermission){
-            throw new InvalidArgumentException('Cannot add a permission as a child of a permission');
-        }
-
         YAuthItemChild::create(['parent_item_id' => $parent->id, 'child_item_id' => $child->id]);
         $this->autoUpdateCache();
 

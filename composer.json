@@ -10,7 +10,9 @@
             "email": "807522127@qq.com"
         }
     ],
-    "require": {},
+    "require": {
+        "gazsp/baum": "~1.1"
+    },
     "require-dev": {
         "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0"

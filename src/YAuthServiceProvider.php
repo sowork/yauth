@@ -16,8 +16,6 @@ class YAuthServiceProvider extends ServiceProvider
     {
         //
         $this->registerMigration();
-        $this->registerView();
-        $this->registerResource();
     }
 
     /**
@@ -49,29 +47,5 @@ class YAuthServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'yauth-migrations');
-    }
-
-    /**
-     * 注册视图
-     */
-    private function registerView(){
-//        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'yauth');
-//        $this->publishes([
-//            __DIR__.'/../resources/views' => base_path('resources/views/vendor/yauth'),
-//        ], 'yauth-views');
-    }
-
-    /**
-     * 注册资源
-     */
-    private function registerResource(){
-//        $this->publishes([
-//            __DIR__.'/../resources/yauth-assets' => public_path('vendor/yauth-assets'),
-//        ], 'yauth-public');
-    }
-
-    public function provides()
-    {
-
     }
 }

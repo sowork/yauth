@@ -10,17 +10,7 @@ use Sowork\YAuth\Http\Event\ItemRelationUpdating;
 class YAuthItemRelation extends Node
 {
     //
-    protected $table = 'dictionary';
+    protected $table = 'yauth_item_relation';
 
     protected $guarded = [];
-
-    protected $dispatchesEvents = [
-        'creating' => ItemRelationCreating::class,
-        'updating' => ItemRelationUpdating::class
-    ];
-
-    protected $events = [
-        'creating' => ItemRelationCreating::class,
-        'updating' => ItemRelationUpdating::class
-    ];
 }

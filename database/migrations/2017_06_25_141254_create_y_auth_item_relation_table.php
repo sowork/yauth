@@ -15,8 +15,10 @@ class CreateYAuthItemRelationTable extends Migration
     {
         Schema::create('yauth_item_relation', function (Blueprint $table){
             $table->engine = 'InnoDB';
-            $table->unsignedInteger('item_id');
+            $table->increments('id');
 
+            $table->unsignedInteger('item_id');
+            $table->string('provider');
             $table->integer('parent_id')->nullable()->index();
             $table->integer('lft')->nullable()->index();
             $table->integer('rgt')->nullable()->index();

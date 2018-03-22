@@ -17,8 +17,7 @@ class CreateYAuthItemRelationTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
 
-            $table->unsignedInteger('item_id');
-            $table->string('provider');
+            $table->unsignedInteger('group_id');
             $table->integer('parent_id')->nullable()->index();
             $table->integer('lft')->nullable()->index();
             $table->integer('rgt')->nullable()->index();
@@ -26,7 +25,7 @@ class CreateYAuthItemRelationTable extends Migration
 
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('item_id')->references('id')->on('yauth_items');
+            $table->foreign('group_id')->references('id')->on('yauth_items');
         });
     }
 

@@ -21,6 +21,7 @@ class CreateYAuthItemsTable extends Migration
             $table->string('item_name');
             $table->string('item_desc');
             $table->unsignedTinyInteger('item_type');
+            $table->string('scope');
 
             $table->softDeletes();
             $table->timestamps();

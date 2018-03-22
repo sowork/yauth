@@ -16,13 +16,13 @@ class CreateYAuthAssignmentsTable extends Migration
         Schema::create('yauth_assignments', function (Blueprint $table){
             $table->engine = 'innoDB';
             $table->increments('id');
-            $table->unsignedInteger('item_id');
+            $table->unsignedInteger('relation_id');
             $table->unsignedInteger('user_id');
             $table->string('provider');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('item_id')->references('id')->on('yauth_items');
+            $table->foreign('relation_id')->references('id')->on('yauth_item_relation');
         });
     }
 
